@@ -106,14 +106,17 @@ Here I have Comparing the two models i.e. ssd_inception_v2_coco and faster_rcnn_
 
 | Model/Framework                             		  | Latency (microseconds)            | Memory (Mb) |
 | -----------------------------------                 |:---------------------------------:| -------:	|
-| faster_rcnn_inception_v2_custom_dataset (Tensorflow)| 690                               | 562    |
-| faster_rcnn_inception_v2_custom_dataset (OpenVINO)  | 230                               | 281    |
-| ssd_inception_v2_coco (tensorflow)          		  | 590                               | 538    |
-| ssd_inception_v2_coco (OpenVINO)            		  | 155                               | 329    |
+| faster_rcnn_inception_v2_custom_dataset (Tensorflow)| 690                               | 57.2   |
+| faster_rcnn_inception_v2_custom_dataset (OpenVINO)  | 230                               | 53.2   |
+| ssd_inception_v2_coco (tensorflow)          		  | 580                               | 538    |
+| ssd_inception_v2_coco (OpenVINO)            		  | 150                               | 329    |
 
-## Model Use cases
+## Model Use Cases
 
 This application could keep checking on a number of people in a particular area(i.e. any restricted area) Example as ATM, industrial area, as a current crisis(i.e. COVID-19) to count the number of people in the frame.
+
+## Effects on End User Needs
+Good Lighting condition required and camera angle would be better if you install on top as you can see on current screenshot.
 
 ## Run the application
 
@@ -224,3 +227,11 @@ CAMERA_FEED_SERVER: "http://localhost:3004"
 ...
 MQTT_SERVER: "ws://localhost:3002"
 ```
+
+
+## Output ScreenShot
+# Output 1
+![people-counter-python](./images/screenshot_1.png)
+
+# Output 2
+![people-counter-python](./images/screenshot_2.png)
