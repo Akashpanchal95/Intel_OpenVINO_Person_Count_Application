@@ -97,21 +97,21 @@ def infer_on_stream(args, client):
     ### TODO: Handle the input stream ###
     # Checks for live feed
     if args.input == 'CAM':
-        input_validated = 0
+        input_file = 0
 
     # Checks for input image
     elif args.input.endswith('.jpg') or args.input.endswith('.bmp') :
         single_image_mode = True
-        input_validated = args.input
+        input_file = args.input
 
     # Checks for video file
     else:
-        input_validated = args.input
+        input_file = args.input
         assert os.path.isfile(args.input), "file doesn't exist"
 
     ### TODO: Handle the input stream ###
-    cap = cv2.VideoCapture(input_validated)
-    cap.open(input_validated)
+    cap = cv2.VideoCapture(input_file)
+    cap.open(input_file)
 
     init_width = int(cap.get(3))
     init_height = int(cap.get(4))
@@ -167,7 +167,7 @@ def infer_on_stream(args, client):
                     'total':total_count
                 }))
 
-            #calculate person time
+            #calculate person spending time
             if person_count < last_count:
                 waiting_time = int(time.time() - start_time)
                 client.publish("person/duration",
@@ -186,16 +186,21 @@ def infer_on_stream(args, client):
 
 
         ### TODO: Send the frame to the FFMPEG server ###
-        #  Resize the frame
-        # frame = cv2.resize(frame, (init_width, init_height))
         sys.stdout.buffer.write(frame)
         sys.stdout.flush()
 
         ### TODO: Write an output image if `single_image_mode` ###
         if single_image_mode:
             cv2.imwrite('output.jpg',frame)
+
+        # if the `q` key pressed it will break loop and close the video
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
+            break
+
     cap.release()
     cv2.destroyAllWindows()
+    client.disconnect()
 
 
 

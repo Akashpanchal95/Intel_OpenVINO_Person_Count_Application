@@ -55,15 +55,17 @@ class Network:
         layers_supported = self.plugin.query_network(self.network, device_name='CPU')
         layers =self.network.layers.keys()
 
-        all_supported = True
+        supported_layer = True
         for l in layers:
             if l not in layers_supported:
-                all_supported = False
+                supported_layer = False
 
-        if not all_supported:
+        if not supported_layer:
             self.plugin.add_extension(cpu_extension,device)
 
+
         self.exec_network = self.plugin.load_network(self.network, device)
+
         # Get the input layer
         self.input_blob = next(iter(self.network.inputs))
         self.output_blob = next(iter(self.network.outputs))
@@ -75,8 +77,8 @@ class Network:
     def get_input_shape(self):
         ### TODO: Return the shape of the input layer ###
         input_shapes = {}
-        for inp in self.network.inputs:
-            input_shapes[inp] = (self.network.inputs[inp].shape)
+        for input in self.network.inputs:
+            input_shapes[input] = (self.network.inputs[input].shape)
         return input_shapes
 
     def exec_net(self, net_input, request_id):
