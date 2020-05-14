@@ -6,31 +6,50 @@ questions.
 
 ## Explaining Custom Layers
 
-The process behind converting custom layers involves...
+In this project I have used my 2 year old model, which is trained on the faster_rcnn_inception_v2 model, for dataset perspective I have collected the person images from internet, mobile and other sources. Here I have converted the model using OpenVINO™ which is provide the model converter steps under the model optimizer.
 
-Some of the potential reasons for handling custom layers are...
+Below you can find drive link for my custom model with the custom dataset, the model accuracy is two low so we need to set threshold .1 for better result.
+https://drive.google.com/drive/folders/1BA_8PTuQfG-9riRHwGtw5iKoNFilPpaC?usp=sharing 
+
+
+Download the model from google drive and pass PB model and config file for model conversion.
+
+To convert the original model to IR using the following command (i.e. PB to IR):
+
+```
+python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json --tensorflow_object_detection_api pipeline.config
+```
+
 
 ## Comparing Model Performance
 
 My method(s) to compare models before and after conversion to Intermediate Representations
-were...
+were IR model give best performance compare to original model.
 
-The difference between model accuracy pre- and post-conversion was...
+You can find the model details in below table
 
-The size of the model pre- and post-conversion was...
 
-The inference time of the model pre- and post-conversion was...
+Here I have Comparing the two models i.e. ssd_inception_v2_coco and faster_rcnn_inception_v2_custom model in terms of latency and memory. here we can clearly see that Latency(microseconds) and Model memory both are decreases using OpenVINO as compare to original TensorFlow model.
+
+| Model/Framework                             		  | Latency (microseconds)            | Memory (Mb) |
+| -----------------------------------                 |:---------------------------------:| -------:	|
+| faster_rcnn_inception_v2_custom_dataset (Tensorflow)| 690                               | 57.2   |
+| faster_rcnn_inception_v2_custom_dataset (OpenVINO)  | 230                               | 53.2   |
+| ssd_inception_v2_coco (tensorflow)          		  | 580                               | 538    |
+| ssd_inception_v2_coco (OpenVINO)            		  | 150                               | 329    |
+
 
 ## Assess Model Use Cases
 
-Some of the potential use cases of the people counter app are...
-
-Each of these use cases would be useful because...
+This application could keep checking on a number of people in a particular area(i.e. any restricted area) Example as ATM, industrial area, as a current crisis(i.e. COVID-19) to count the number of people in the frame.
+Each of these use cases would be useful because we can easily deployed into the edge devices.
 
 ## Assess Effects on End User Needs
 
 Lighting, model accuracy, and camera focal length/image size have different effects on a
-deployed edge model. The potential effects of each of these are as follows...
+deployed edge model. The potential effects of each of these are as follows 
+If lighting condition change frequently then model gives a false positive or even sometimes not detected due to fewer data. 
+Camera angle its also important, because due to the occlusion problem the two-person counted as one, so will give false result in counting.
 
 ## Model Research
 
