@@ -8,7 +8,7 @@ questions.
 
 In this project I have used my 2 year old model, which is trained on the faster_rcnn_inception_v2 model, for dataset perspective I have collected the person images from internet, mobile and other sources. Here I have converted the model using OpenVINO™ which is provide the model converter steps under the model optimizer.
 
-Below you can find drive link for my custom model with the custom dataset, the model accuracy is two low so we need to set threshold .1 for better result.
+Below you can find drive link for my custom model with the custom dataset, the model accuracy is two low so we need to set  prob threshold ".1" for better result.
 https://drive.google.com/drive/folders/1BA_8PTuQfG-9riRHwGtw5iKoNFilPpaC?usp=sharing 
 
 
@@ -20,6 +20,18 @@ To convert the original model to IR using the following command (i.e. PB to IR):
 python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json --tensorflow_object_detection_api pipeline.config
 ```
 
+When above command its complete it will give folllowing message.
+```
+XML File:
+[ SUCCESS ] XML file: /home/user_path//./frozen_inference_graph.xml
+[ SUCCESS ] BIN file: /home/user_path/./frozen_inference_graph.bin
+```
+
+To Run the project using following command 
+
+```
+python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m model_path.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.1 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+```
 
 ## Comparing Model Performance
 
@@ -47,9 +59,9 @@ Each of these use cases would be useful because we can easily deployed into the 
 ## Assess Effects on End User Needs
 
 Lighting, model accuracy, and camera focal length/image size have different effects on a
-deployed edge model. The potential effects of each of these are as follows 
+deployed edge model. The potential effects of each of these are as follows,
 If lighting condition change frequently then model gives a false positive or even sometimes not detected due to fewer data. 
-Camera angle its also important, because due to the occlusion problem the two-person counted as one, so will give false result in counting.
+Camera angle its also play important, because due to the occlusion problem the two-person counted as one, so it will give false result in counting. and also camera have enough resolution.(i.e. compitable with the camera trained model)
 
 ## Model Research
 
